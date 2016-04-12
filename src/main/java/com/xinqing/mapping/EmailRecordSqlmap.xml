@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.EmailRecordMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.EmailRecord">
+		<result column="pk_id" property="pkId" ></result>
+		<result column="email_group_id" property="emailGroupId" ></result>
+		<result column="email_date" property="emailDate" ></result>
+		<result column="send_date" property="sendDate" ></result>
+	</resultMap>
+	<sql id="Base_Column_List">
+			pk_id,
+			email_group_id,
+			email_date,
+			send_date
+	</sql>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from email_record
+		where pk_id = #{pkId};
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from email_record
+		where 1=1
+		<if test="pkId != null and pkId != '' ">
+			and pk_id = #{pkId}
+		</if>
+		<if test="emailGroupId != null and emailGroupId != '' ">
+			and email_group_id = #{emailGroupId}
+		</if>
+		<if test="emailDate != null and emailDate != '' ">
+			and email_date = #{emailDate}
+		</if>
+		<if test="sendDate != null and sendDate != '' ">
+			and send_date = #{sendDate}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.EmailRecord">
+           insert into email_record(<include refid="Base_Column_List"></include>) 
+               values(
+					#{pkId},
+					#{emailGroupId},
+					#{emailDate},
+					#{sendDate}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.EmailRecord">
+           update email_record
+		   <set>
+	           		<if test="pkId != null">
+	           		pk_id = #{pkId},
+	           		</if>
+	           		<if test="emailGroupId != null">
+	           		email_group_id = #{emailGroupId},
+	           		</if>
+	           		<if test="emailDate != null">
+	           		email_date = #{emailDate},
+	           		</if>
+					<if test="sendDate != null">
+	           		send_date = #{sendDate}
+	           		</if>
+		   </set>
+           where pk_id = #{pkId}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from email_record where pk_id = #{pkId};
+	</delete>
+	
+</mapper>

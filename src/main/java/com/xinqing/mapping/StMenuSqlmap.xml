@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.StMenuMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.StMenu">
+		<result column="id" property="id" />
+		<result column="text" property="text" />
+		<result column="url" property="url" />
+		<result column="icon_cls" property="iconCls" />
+		<result column="state" property="state" />
+		<result column="parent_id" property="parentId" />
+		<result column="create_time" property="createTime" />
+		<result column="status" property="status" />
+		<result column="is_redirect" property="isRedirect" />
+		
+		<association property="children" column="id" select="selectChildren"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+			id,
+			text,
+			url,
+			icon_cls,
+			state,
+			parent_id,
+			create_time,
+			status,
+			is_redirect
+	</sql>
+	
+	<select id="selectChildren" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from st_menu
+		where parent_id = #{id};
+	</select>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from st_menu
+		where id = #{id};
+	</select>
+	
+	<select id="findUserMenus" parameterType = "String" resultMap="BaseResultMap">
+		select DISTINCT <include refid="Base_Column_List"></include> 
+		from st_menu m 
+		where m.id in (
+		select DISTINCT menu_id 
+		from role_menu rm 
+		where rm.role_id in (
+		select role_id 
+		from role_user ru 
+		where ru.user_id = #{userId}))
+		
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from st_menu
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="text != null">
+			and text = #{text}
+		</if>
+		<if test="url != null">
+			and url = #{url}
+		</if>
+		<if test="iconCls != null">
+			and icon_cls = #{iconCls}
+		</if>
+		<if test="state != null">
+			and state = #{state}
+		</if>
+		<if test="parentId != null">
+			and parent_id = #{parentId}
+		</if>
+		<if test="createTime != null">
+			and create_time = #{createTime}
+		</if>
+		<if test="status != null">
+			and status = #{status}
+		</if>
+		<if test="isRedirect != null">
+			and is_redirect = #{isRedirect}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.StMenu">
+           insert into st_menu(<include refid="Base_Column_List"/>) 
+               values(
+					#{id},
+					#{text},
+					#{url},
+					#{iconCls},
+					#{state},
+					#{parentId},
+					#{createTime},
+					#{status},
+					#{isRedirect}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.StMenu">
+           update st_menu set           
+	           		<if test="id != null">
+	           		id = #{id},
+	           		</if>
+           
+	           		<if test="text != null">
+	           		text = #{text},
+	           		</if>
+           
+	           		<if test="url != null">
+	           		url = #{url},
+	           		</if>
+           
+	           		<if test="iconCls != null">
+	           		icon_cls = #{iconCls},
+	           		</if>
+           
+	           		<if test="state != null">
+	           		state = #{state},
+	           		</if>
+           
+	           		<if test="parentId != null">
+	           		parent_id = #{parentId},
+	           		</if>
+           
+	           		<if test="createTime != null">
+	           		create_time = #{createTime},
+	           		</if>
+           
+	           		<if test="status != null">
+	           		status = #{status},
+	           		</if>
+           
+					<if test="isRedirect != null">
+	           		is_redirect = #{isRedirect}
+	           		</if>
+           
+           where id = #{id}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from st_menu where id = #{id};
+	</delete>
+	
+</mapper>

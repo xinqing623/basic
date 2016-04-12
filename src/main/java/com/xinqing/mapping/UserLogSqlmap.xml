@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.UserLogMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.UserLog">
+		<result column="pk_id" property="pkId" />
+		<result column="user_id" property="userId" />
+		<result column="project_id" property="projectId" />
+		<result column="content" property="content" />
+		<result column="progress" property="progress" />
+		<result column="question" property="question" />
+		<result column="spend_time" property="spendTime" />
+		<result column="relate_jira_no" property="relateJiraNo" />
+		<result column="log_date" property="logDate" />
+		<result column="create_time" property="createTime" />
+		
+		<association column="user_id" property="sysUser" select="com.xinqing.mapping.SysUserMapper.selectByPK"/>
+		<association column="project_id" property="sysProject"  select="com.xinqing.mapping.SysProjectMapper.selectByPK"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+			pk_id,
+			user_id,
+			project_id,
+			content,
+			progress,
+			question,
+			spend_time,
+			relate_jira_no,
+			log_date,
+			create_time
+	</sql>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from user_log
+		where pk_id = #{pkId};
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from user_log
+		where 1=1
+		<if test="pkId != null and pkId != '' ">
+			and pk_id = #{pkId}
+		</if>
+		<if test="userId != null and userId != '' ">
+			and user_id = #{userId}
+		</if>
+		<if test="projectId != null and projectId != '' ">
+			and project_id = #{projectId}
+		</if>
+		<if test="content != null and content != '' ">
+			and content = #{content}
+		</if>
+		<if test="progress != null and progress != '' ">
+			and progress = #{progress}
+		</if>
+		<if test="question != null and question != '' ">
+			and question = #{question}
+		</if>
+		<if test="spendTime != null and spendTime != '' ">
+			and spend_time = #{spendTime}
+		</if>
+		<if test="relateJiraNo != null and relateJiraNo != '' ">
+			and relate_jira_no = #{relateJiraNo}
+		</if>
+		<if test="logDate != null and logDate != '' ">
+			and log_date = #{logDate}
+		</if>
+		<if test="createTime != null and createTime != '' ">
+			and create_time = #{createTime}
+		</if>
+	</select>
+	
+	<select id="selectGroupLog" parameterType="HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include> 
+		from user_log ul 
+		where ul.user_id in 
+		(select user_id from email_group_user egu where egu.email_group_id = #{groupId} and egu.is_cc = '0')  
+		and ( ul.log_date BETWEEN #{startTime} and #{endTime} )
+		order by create_time desc
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.UserLog">
+           insert into user_log(<include refid="Base_Column_List"></include>) 
+               values(
+					#{pkId},
+					#{userId},
+					#{projectId},
+					#{content},
+					#{progress},
+					#{question},
+					#{spendTime},
+					#{relateJiraNo},
+					#{logDate},
+					#{createTime}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.UserLog">
+           update user_log
+		   <set>
+	           		<if test="pkId != null">
+	           		pk_id = #{pkId},
+	           		</if>
+	           		<if test="userId != null">
+	           		user_id = #{userId},
+	           		</if>
+	           		<if test="projectId != null">
+	           		project_id = #{projectId},
+	           		</if>
+	           		<if test="content != null">
+	           		content = #{content},
+	           		</if>
+	           		<if test="progress != null">
+	           		progress = #{progress},
+	           		</if>
+	           		<if test="question != null">
+	           		question = #{question},
+	           		</if>
+	           		<if test="spendTime != null">
+	           		spend_time = #{spendTime},
+	           		</if>
+	           		<if test="relateJiraNo != null">
+	           		relate_jira_no = #{relateJiraNo},
+	           		</if>
+	           		<if test="logDate != null">
+	           		log_date = #{logDate},
+	           		</if>
+					<if test="createTime != null">
+	           		create_time = #{createTime}
+	           		</if>
+		   </set>
+           where pk_id = #{pkId}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from user_log where pk_id = #{pkId}
+	</delete>
+	
+</mapper>

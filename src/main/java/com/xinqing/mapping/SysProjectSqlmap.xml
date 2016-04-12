@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.SysProjectMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.SysProject">
+		<result column="pk_id" property="pkId" ></result>
+		<result column="project_name" property="projectName" ></result>
+		<result column="remark" property="remark" ></result>
+		<result column="leader_id" property="leaderId" ></result>
+		<result column="start_time" property="startTime" ></result>
+		<result column="end_time" property="endTime" ></result>
+		<result column="jira_url" property="jiraUrl" ></result>
+		<result column="status" property="status" ></result>
+		<result column="create_time" property="createTime" ></result>
+		
+		<association  column="leader_id" property="sysUser" select="com.xinqing.mapping.SysUserMapper.selectByPK"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+			pk_id,
+			project_name,
+			remark,
+			leader_id,
+			start_time,
+			end_time,
+			jira_url,
+			status,
+			create_time
+	</sql>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from sys_project
+		where pk_id = #{pkId};
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from sys_project
+		where 1=1
+		<if test="pkId != null and pkId != '' ">
+			and pk_id = #{pkId}
+		</if>
+		<if test="projectName != null and projectName != '' ">
+			and project_name like CONCAT('%','${projectName}','%' )   
+		</if>
+		<if test="remark != null and remark != '' ">
+			and remark like CONCAT('%','${remark}','%' )
+		</if>
+		<if test="leaderId != null and leaderId != '' ">
+			and leader_id = #{leaderId}
+		</if>
+		<if test="startTime != null and startTime != '' ">
+			and start_time = #{startTime}
+		</if>
+		<if test="endTime != null and endTime != '' ">
+			and end_time = #{endTime}
+		</if>
+		<if test="jiraUrl != null and jiraUrl != '' ">
+			and jira_url = #{jiraUrl}
+		</if>
+		<if test="status != null and status != '' ">
+			and status = #{status}
+		</if>
+		<if test="createTime != null and createTime != '' ">
+			and create_time = #{createTime}
+		</if>
+	</select>
+	
+	<select id="selectUserProjects" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include> 
+		from sys_project sp
+		where sp.pk_id in (
+		select pu.project_id from project_user pu where pu.user_id = #{userId})
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.SysProject">
+           insert into sys_project(<include refid="Base_Column_List"></include>) 
+               values(
+					#{pkId},
+					#{projectName},
+					#{remark},
+					#{leaderId},
+					#{startTime},
+					#{endTime},
+					#{jiraUrl},
+					#{status},
+					#{createTime}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.SysProject">
+           update sys_project
+		   <set>
+	           		<if test="pkId != null">
+	           		pk_id = #{pkId},
+	           		</if>
+	           		<if test="projectName != null">
+	           		project_name = #{projectName},
+	           		</if>
+	           		<if test="remark != null">
+	           		remark = #{remark},
+	           		</if>
+	           		<if test="leaderId != null">
+	           		leader_id = #{leaderId},
+	           		</if>
+	           		<if test="startTime != null">
+	           		start_time = #{startTime},
+	           		</if>
+	           		<if test="endTime != null">
+	           		end_time = #{endTime},
+	           		</if>
+	           		<if test="jiraUrl != null">
+	           		jira_url = #{jiraUrl},
+	           		</if>
+	           		<if test="status != null">
+	           		status = #{status},
+	           		</if>
+					<if test="createTime != null">
+	           		create_time = #{createTime}
+	           		</if>
+		   </set>
+           where pk_id = #{pkId}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from sys_project where pk_id = #{pkId};
+	</delete>
+	
+</mapper>

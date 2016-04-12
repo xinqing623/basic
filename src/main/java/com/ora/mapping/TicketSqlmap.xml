@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ora.mapping.TicketMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.TicketEntity">
+		<result column="ccauthcode" property="ccAuthCode"/>
+		<result column="transactionid" property="transactionId"/>
+		<result column="ccauthdatetime" property="ccAuthDatetime"/>
+		<result column="code" property="code"/>
+		<result column="status" property="status"/>
+		<result column="initialbookingdatetime" property="initialBookingDatetime"></result>
+	</resultMap>
+	
+
+	<select id="selectAllOrder" parameterType="com.ora.service.vo.TicketSearchVo" resultMap="BaseResultMap">
+		select distinct (rcp.ccauthcode), rcp.transactionid, rcp.ccauthdatetime, r.code, r.status ,r.initialbookingdatetime
+		from resvcustomerpayment rcp, resvcustomer rc, resv r
+		where rcp.resvcustomerid = rc.id
+		AND rc.resvid = r.id
+		AND rcp.ccauthcode is not null
+		AND r.initialbookingdatetime between to_date(#{fromDate}, 'yyyy-mm-dd hh24:mi:ss') 
+		AND to_date( #{toDate}, 'yyyy-mm-dd hh24:mi:ss')
+		order by rcp.ccauthdatetime
+	</select>
+
+	<select id="selectUnNormalOrder" parameterType="String" resultMap="BaseResultMap">
+		select distinct (rcp.ccauthcode), rcp.transactionid, rcp.ccauthdatetime, r.code, r.status ,r.initialbookingdatetime
+		from resvcustomerpayment rcp, resvcustomer rc, resv r
+		where rcp.resvcustomerid = rc.id
+		AND rc.resvid = r.id
+		AND rcp.ccauthcode is not null
+		and rcp.TRANSACTIONID in (#{transcationIds})
+		order by rcp.ccauthdatetime
+	</select>
+	
+	<select id="selectUnNormalOrder2" parameterType="com.ora.service.vo.TicketSearchVo" resultMap="BaseResultMap">
+		select distinct(r.code), r.initialbookingdatetime, r.status,rcp.ccauthcode,rcp.ccauthcode, rcp.transactionid 
+		from resv r, resvcustomer rc, resvcustomerpayment rcp
+		where rcp.resvcustomerid = rc.id
+		AND rc.resvid = r.id
+		AND rcp.ccauthcode is not null
+		AND r. status != ('TICKETED')
+		AND r. status != ('CANCELLED')
+		and r.initialbookingdatetime between to_date(#{fromDate}, 'yyyy-mm-dd hh24:mi:ss') and to_date(#{toDate}, 'yyyy-mm-dd hh24:mi:ss')
+		order by r.code desc
+	</select>
+
+
+</mapper>

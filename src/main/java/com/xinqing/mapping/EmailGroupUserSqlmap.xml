@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.EmailGroupUserMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.EmailGroupUser">
+		<result column="pk_id" property="pkId" ></result>
+		<result column="email_group_id" property="emailGroupId" ></result>
+		<result column="user_id" property="userId" ></result>
+		<result column="is_cc" property="isCc" ></result>
+		<result column="join_time" property="joinTime" ></result>
+		
+		<association column="user_id" property="sysUser" select="com.xinqing.mapping.SysUserMapper.selectByPK" />
+	</resultMap>
+	<sql id="Base_Column_List">
+			pk_id,
+			email_group_id,
+			user_id,
+			is_cc,
+			join_time
+	</sql>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from email_group_user
+		where pk_id = #{pkId};
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from email_group_user
+		where 1=1
+		<if test="pkId != null and pkId != '' ">
+			and pk_id = #{pkId}
+		</if>
+		<if test="emailGroupId != null and emailGroupId != '' ">
+			and email_group_id = #{emailGroupId}
+		</if>
+		<if test="userId != null and userId != '' ">
+			and user_id = #{userId}
+		</if>
+		<if test="isCc != null and isCc != '' ">
+			and is_cc = #{isCc}
+		</if>
+		<if test="joinTime != null and joinTime != '' ">
+			and join_time = #{joinTime}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.EmailGroupUser">
+           insert into email_group_user(<include refid="Base_Column_List"></include>) 
+               values(
+					#{pkId},
+					#{emailGroupId},
+					#{userId},
+					#{isCc},
+					#{joinTime}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.EmailGroupUser">
+           update email_group_user
+		   <set>
+	           		<if test="pkId != null">
+	           		pk_id = #{pkId},
+	           		</if>
+	           		<if test="emailGroupId != null">
+	           		email_group_id = #{emailGroupId},
+	           		</if>
+	           		<if test="userId != null">
+	           		user_id = #{userId},
+	           		</if>
+	           		<if test="isCc != null">
+	           		is_cc = #{isCc},
+	           		</if>
+					<if test="joinTime != null">
+	           		join_time = #{joinTime}
+	           		</if>
+		   </set>
+           where pk_id = #{pkId}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from email_group_user where pk_id = #{pkId};
+	</delete>
+	
+</mapper>

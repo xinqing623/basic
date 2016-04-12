@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
+		
+		
+	<!-- 拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.xinqing.intercepter.ThreadControlIntercepter" scope="prototype"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/login"/>
+			<mvc:exclude-mapping path="/sessionout"/>	
+			<mvc:exclude-mapping path="/summary/**"/>		
+			<bean class="com.xinqing.intercepter.LoginIntercepter" scope="prototype"/>
+		</mvc:interceptor>
+		
+	</mvc:interceptors>
+
+	<!-- 自动扫描@Controller注入为bean -->
+	<context:component-scan base-package="com.xinqing.controller" />
+	
+	<!--对静态资源文件的访问-->
+	<mvc:resources mapping="/static/images/**" location="/static/images/" />
+	<mvc:resources mapping="/static/js/**" location="/static/js/" />
+	<mvc:resources mapping="/static/css/**" location="/static/css/" />
+
+
+	
+	
+
+	<mvc:annotation-driven />
+	<bean id="defaultJsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/view/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- 支持上传文件 -->
+	<!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" /> -->
+</beans>

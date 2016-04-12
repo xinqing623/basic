@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.AutoTaskMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.AutoTask">
+		<result column="id" property="id" ></result>
+		<result column="job_name" property="jobName" ></result>
+		<result column="job_group_name" property="jobGroupName" ></result>
+		<result column="job_class_name" property="jobClassName" ></result>
+		<result column="trigger_name" property="triggerName" ></result>
+		<result column="trigger_group_name" property="triggerGroupName" ></result>
+		<result column="conn_expression" property="connExpression" ></result>
+		<result column="remark" property="remark" ></result>
+		<result column="create_time" property="createTime" ></result>
+		<result column="is_auto_start" property="isAutoStart" ></result>
+		<result column="start_time" property="startTime" ></result>
+		<result column="job_status" property="jobStatus" ></result>
+	</resultMap>
+	<sql id="Base_Column_List">
+			id,
+			job_name,
+			job_group_name,
+			job_class_name,
+			trigger_name,
+			trigger_group_name,
+			conn_expression,
+			remark,
+			create_time,
+			is_auto_start,
+			start_time,
+			job_status
+	</sql>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from auto_task
+		where id = #{id};
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from auto_task
+		where 1=1
+		<if test="id != null and id != '' ">
+			and id = #{id}
+		</if>
+		<if test="jobName != null and jobName != '' ">
+			and job_name = #{jobName}
+		</if>
+		<if test="jobGroupName != null and jobGroupName != '' ">
+			and job_group_name = #{jobGroupName}
+		</if>
+		<if test="jobClassName != null and jobClassName != '' ">
+			and job_class_name = #{jobClassName}
+		</if>
+		<if test="triggerName != null and triggerName != '' ">
+			and trigger_name = #{triggerName}
+		</if>
+		<if test="triggerGroupName != null and triggerGroupName != '' ">
+			and trigger_group_name = #{triggerGroupName}
+		</if>
+		<if test="connExpression != null and connExpression != '' ">
+			and conn_expression = #{connExpression}
+		</if>
+		<if test="remark != null and remark != '' ">
+			and remark = #{remark}
+		</if>
+		<if test="createTime != null and createTime != '' ">
+			and create_time = #{createTime}
+		</if>
+		<if test="isAutoStart != null and isAutoStart != '' ">
+			and is_auto_start = #{isAutoStart}
+		</if>
+		<if test="startTime != null and startTime != '' ">
+			and start_time = #{startTime}
+		</if>
+		<if test="jobStatus != null and jobStatus != '' ">
+			and job_status = #{jobStatus}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.AutoTask">
+           insert into auto_task(<include refid="Base_Column_List"></include>) 
+               values(
+					#{id},
+					#{jobName},
+					#{jobGroupName},
+					#{jobClassName},
+					#{triggerName},
+					#{triggerGroupName},
+					#{connExpression},
+					#{remark},
+					#{createTime},
+					#{isAutoStart},
+					#{startTime},
+					#{jobStatus}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.AutoTask">
+           update auto_task
+		   <set>
+	           		<if test="id != null">
+	           		id = #{id},
+	           		</if>
+	           		<if test="jobName != null">
+	           		job_name = #{jobName},
+	           		</if>
+	           		<if test="jobGroupName != null">
+	           		job_group_name = #{jobGroupName},
+	           		</if>
+	           		<if test="jobClassName != null">
+	           		job_class_name = #{jobClassName},
+	           		</if>
+	           		<if test="triggerName != null">
+	           		trigger_name = #{triggerName},
+	           		</if>
+	           		<if test="triggerGroupName != null">
+	           		trigger_group_name = #{triggerGroupName},
+	           		</if>
+	           		<if test="connExpression != null">
+	           		conn_expression = #{connExpression},
+	           		</if>
+	           		<if test="remark != null">
+	           		remark = #{remark},
+	           		</if>
+	           		<if test="createTime != null">
+	           		create_time = #{createTime},
+	           		</if>
+	           		<if test="isAutoStart != null">
+	           		is_auto_start = #{isAutoStart},
+	           		</if>
+	           		<if test="startTime != null">
+	           		start_time = #{startTime},
+	           		</if>
+					<if test="jobStatus != null">
+	           		job_status = #{jobStatus}
+	           		</if>
+		   </set>
+           where id = #{id}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from auto_task where id = #{id};
+	</delete>
+	
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.FtlTemplateMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.FtlTemplate">
+		<result column="id" property="id" />
+		<result column="template_name" property="templateName" />
+		<result column="folder" property="folder" />
+		<result column="suffix" property="suffix" />
+		<result column="remark" property="remark" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+			id,
+			template_name,
+			folder,
+			suffix,
+			remark,
+			create_time
+	</sql>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from ftl_template
+		where id = #{id};
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from ftl_template
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="templateName != null">
+			and template_name = #{templateName}
+		</if>
+		<if test="folder != null">
+			and folder = #{folder}
+		</if>
+		<if test="suffix != null">
+			and suffix = #{suffix}
+		</if>
+		<if test="remark != null">
+			and remark = #{remark}
+		</if>
+		<if test="createTime != null">
+			and create_time = #{createTime}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.FtlTemplate">
+           insert into ftl_template(<include refid="Base_Column_List"/>) 
+               values(
+					#{id},
+					#{templateName},
+					#{folder},
+					#{suffix},
+					#{remark},
+					#{createTime}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.FtlTemplate">
+           update ftl_template         
+           <set>
+	           		<if test="id != null">
+	           		id = #{id},
+	           		</if>
+           
+	           		<if test="templateName != null">
+	           		template_name = #{templateName},
+	           		</if>
+           
+	           		<if test="folder != null">
+	           		folder = #{folder},
+	           		</if>
+           
+	           		<if test="suffix != null">
+	           		suffix = #{suffix},
+	           		</if>
+           
+	           		<if test="remark != null">
+	           		remark = #{remark},
+	           		</if>
+           
+					<if test="createTime != null">
+	           		create_time = #{createTime}
+	           		</if>
+           </set>
+           where id = #{id}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from ftl_template where id = #{id};
+	</delete>
+	
+</mapper>

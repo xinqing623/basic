@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.AutoCodeParamMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.AutoCodeParam">
+		<result column="id" property="id" />
+		<result column="db_type" property="dbType" />
+		<result column="db_name" property="dbName" />
+		<result column="jdbc_driver" property="jdbcDriver" />
+		<result column="conn_url" property="connUrl" />
+		<result column="jdbc_username" property="jdbcUsername" />
+		<result column="jdbc_password" property="jdbcPassword" />
+		<result column="dest_path" property="destPath"/>
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+			id,
+			db_type,
+			db_name,
+			jdbc_driver,
+			conn_url,
+			jdbc_username,
+			jdbc_password,
+			dest_path,
+			create_time
+	</sql>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from auto_code_param
+		where id = #{id};
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from auto_code_param
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="dbType != null">
+			and db_type = #{dbType}
+		</if>
+		<if test="dbName != null">
+			and db_name = #{dbName}
+		</if>
+		<if test="jdbcDriver != null">
+			and jdbc_driver = #{jdbcDriver}
+		</if>
+		<if test="connUrl != null">
+			and conn_url = #{connUrl}
+		</if>
+		<if test="jdbcUsername != null">
+			and jdbc_username = #{jdbcUsername}
+		</if>
+		<if test="jdbcPassword != null">
+			and jdbc_password = #{jdbcPassword}
+		</if>
+		<if test="destPath != null">
+			and dest_path = #{destPath}
+		</if>
+		<if test="createTime != null">
+			and create_time = #{createTime}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.AutoCodeParam">
+           insert into auto_code_param(<include refid="Base_Column_List"/>) 
+               values(
+					#{id},
+					#{dbType},
+					#{dbName},
+					#{jdbcDriver},
+					#{connUrl},
+					#{jdbcUsername},
+					#{jdbcPassword},
+					#{destPath},
+					#{createTime}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.AutoCodeParam">
+           update auto_code_param set           
+	           		<if test="id != null">
+	           		id = #{id},
+	           		</if>
+           
+	           		<if test="dbType != null">
+	           		db_type = #{dbType},
+	           		</if>
+           
+	           		<if test="dbName != null">
+	           		db_name = #{dbName},
+	           		</if>
+           
+	           		<if test="jdbcDriver != null">
+	           		jdbc_driver = #{jdbcDriver},
+	           		</if>
+           
+	           		<if test="connUrl != null">
+	           		conn_url = #{connUrl},
+	           		</if>
+           
+	           		<if test="jdbcUsername != null">
+	           		jdbc_username = #{jdbcUsername},
+	           		</if>
+           
+	           		<if test="jdbcPassword != null">
+	           		jdbc_password = #{jdbcPassword},
+	           		</if>
+           
+           			<if test="destPath != null">
+           			dest_path = #{destPath},
+           			</if>
+           			
+					<if test="createTime != null">
+	           		create_time = #{createTime}
+	           		</if>
+           
+           where id = #{id}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from auto_code_param where id = #{id};
+	</delete>
+	
+</mapper>

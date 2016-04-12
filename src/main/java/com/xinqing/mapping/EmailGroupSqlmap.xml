@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.EmailGroupMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.EmailGroup">
+		<result column="pk_id" property="pkId" ></result>
+		<result column="group_name" property="groupName" ></result>
+		<result column="remind_time" property="remindTime" ></result>
+		<result column="send_time" property="sendTime" ></result>
+		<result column="create_time" property="createTime" ></result>
+		<result column="remind_template_id" property="remindTemplateId" ></result>
+		<result column="send_template_id" property="sendTemplateId" ></result>
+		<result column="status" property="status" ></result>
+	</resultMap>
+	<sql id="Base_Column_List">
+			pk_id,
+			group_name,
+			remind_time,
+			send_time,
+			create_time,
+			remind_template_id,
+			send_template_id,
+			status
+	</sql>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from email_group
+		where pk_id = #{pkId};
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from email_group
+		where 1=1
+		<if test="pkId != null and pkId != '' ">
+			and pk_id = #{pkId}
+		</if>
+		<if test="groupName != null and groupName != '' ">
+			and group_name = #{groupName}
+		</if>
+		<if test="remindTime != null and remindTime != '' ">
+			and remind_time = #{remindTime}
+		</if>
+		<if test="sendTime != null and sendTime != '' ">
+			and send_time = #{sendTime}
+		</if>
+		<if test="createTime != null and createTime != '' ">
+			and create_time = #{createTime}
+		</if>
+		<if test="remindTemplateId != null and remindTemplateId != '' ">
+			and remind_template_id = #{remindTemplateId}
+		</if>
+		<if test="sendTemplateId != null and sendTemplateId != '' ">
+			and send_template_id = #{sendTemplateId}
+		</if>
+		<if test="status != null and status != '' ">
+			and status = #{status}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.EmailGroup">
+           insert into email_group(<include refid="Base_Column_List"></include>) 
+               values(
+					#{pkId},
+					#{groupName},
+					#{remindTime},
+					#{sendTime},
+					#{createTime},
+					#{remindTemplateId},
+					#{sendTemplateId},
+					#{status}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.EmailGroup">
+           update email_group
+		   <set>
+	           		<if test="pkId != null">
+	           		pk_id = #{pkId},
+	           		</if>
+	           		<if test="groupName != null">
+	           		group_name = #{groupName},
+	           		</if>
+	           		<if test="remindTime != null">
+	           		remind_time = #{remindTime},
+	           		</if>
+	           		<if test="sendTime != null">
+	           		send_time = #{sendTime},
+	           		</if>
+	           		<if test="createTime != null">
+	           		create_time = #{createTime},
+	           		</if>
+	           		<if test="remindTemplateId != null">
+	           		remind_template_id = #{remindTemplateId},
+	           		</if>
+	           		<if test="sendTemplateId != null">
+	           		send_template_id = #{sendTemplateId},
+	           		</if>
+					<if test="status != null">
+	           		status = #{status}
+	           		</if>
+		   </set>
+           where pk_id = #{pkId}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from email_group where pk_id = #{pkId};
+	</delete>
+	
+</mapper>

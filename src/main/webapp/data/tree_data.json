@@ -1,0 +1,27 @@
+[{
+    "id":1,
+    "text":"Folder1",
+    "iconCls":"icon-save",
+    "children":[{
+		"text":"File1",
+		"checked":true
+    },{
+		"text":"Books",
+		"state":"open",
+		"url":"example.jsp",
+		"iconCls":"icon-man",
+		"children":[{
+			"text":"PhotoShop",
+			"checked":true
+		}]
+    }]
+},{
+	"id":2,
+    "text":"Languages",
+    "state":"closed",
+    "children":[{
+		"text":"Java"
+    },{
+		"text":"C#"
+    }]
+}]

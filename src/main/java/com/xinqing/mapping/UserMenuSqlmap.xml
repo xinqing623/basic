@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinqing.mapping.UserMenuMapper">
+	<resultMap id="BaseResultMap" type="com.xinqing.entity.UserMenu">
+		<result column="pk_id" property="pkId" ></result>
+		<result column="user_id" property="userId" ></result>
+		<result column="menu_id" property="menuId" ></result>
+		<result column="show_index" property="showIndex" ></result>
+	</resultMap>
+	<sql id="Base_Column_List">
+			pk_id,
+			user_id,
+			menu_id,
+			show_index
+	</sql>
+	
+	<select id="selectByPK" parameterType = "String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from user_menu
+		where pk_id = #{pkId};
+	</select>
+	
+	<select id="select" parameterType = "HashMap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from user_menu
+		where 1=1
+		<if test="pkId != null and pkId != '' ">
+			and pk_id = #{pkId}
+		</if>
+		<if test="userId != null and userId != '' ">
+			and user_id = #{userId}
+		</if>
+		<if test="menuId != null and menuId != '' ">
+			and menu_id = #{menuId}
+		</if>
+		<if test="showIndex != null and showIndex != '' ">
+			and show_index = #{showIndex}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xinqing.entity.UserMenu">
+           insert into user_menu(<include refid="Base_Column_List"></include>) 
+               values(
+					#{pkId},
+					#{userId},
+					#{menuId},
+					#{showIndex}
+               )
+	</insert>
+	
+	<update id="update" parameterType="com.xinqing.entity.UserMenu">
+           update user_menu
+		   <set>
+	           		<if test="pkId != null">
+	           		pk_id = #{pkId},
+	           		</if>
+	           		<if test="userId != null">
+	           		user_id = #{userId},
+	           		</if>
+	           		<if test="menuId != null">
+	           		menu_id = #{menuId},
+	           		</if>
+					<if test="showIndex != null">
+	           		show_index = #{showIndex}
+	           		</if>
+		   </set>
+           where pk_id = #{pkId}
+   </update>
+	
+	<delete id="delete" parameterType="String">
+		delete from user_menu where pk_id = #{pkId};
+	</delete>
+	
+</mapper>
